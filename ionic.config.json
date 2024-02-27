@@ -1,0 +1,7 @@
+{
+  "name": "ionic-wicker-wax",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
