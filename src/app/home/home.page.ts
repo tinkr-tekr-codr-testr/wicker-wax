@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
-import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
+import { IonHeader, IonToolbar, IonTitle, IonContent, IonApp, IonButton } from '@ionic/angular/standalone';
+import { VocalService } from '../services/vocal.service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent],
+  imports: [IonButton, IonApp, IonHeader, IonToolbar, IonTitle, IonContent, AsyncPipe],
 })
 export class HomePage {
-  constructor() {}
+  particleCount: Array<number>;
+
+  constructor(public vocal: VocalService) {
+    this.particleCount = new Array(50).fill(1);
+  }
 }

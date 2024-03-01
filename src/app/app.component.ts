@@ -7,6 +7,15 @@ import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
   standalone: true,
   imports: [IonApp, IonRouterOutlet],
 })
+
+
+
 export class AppComponent {
-  constructor() {}
+  particleCount: Array<number>;
+
+  constructor() {
+    this.particleCount = new Array(50).fill(1);
+  }
+
+ 
 }
