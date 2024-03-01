@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Intervention } from '../models/Intervention';
 import { VocalService } from './vocal.service';
-import { nAryCommands, BinaryCommands } from '../models/Commands';}
-import { CommandsFor } from '../models/CommandCategories';}
+import { CommandsFor } from '../models/CommandCategories';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +11,12 @@ export class CheckinService {
   feeling: string = '';
   history: Array<Intervention> = [];
 
-  presenceCommands = BinaryCommands();
-  feelingCommands = nAryCommands(CommandsFor.FEELING);
+  answersMap = new Map<string, Array<string>>(
+    [
+      ['yes', new Array<string>()],
+      ['no',  new Array<string>()]
+    ]
+  );
 
 
 
@@ -22,27 +25,31 @@ export class CheckinService {
   }
 
   async fullCheck(){
-    const status = await this.checkFor("Are you working well?");
+    const status = this.boolify(await this.checkFor("Are you working well?"));
     if(status)  return;
 
     else {
-      const feeling = await this.checkFor('How are you feeling?')
+      const feeling = this.boolify( await this.checkFor('Are you feeling fell?'));
     }
   }
 
-  async checkFor(question: string, commands){
-    let actualStatus;
+  async checkFor(question: string){
     
     await this.vocal.listen(question);
-    const presence = this.vocal.results.value;
+    const answer = this.vocal.results.value;
     
-
-    for(let statusCommands of this.presenceCommands.entries()){
-      const [candidateStatus, commands] = statusCommands;
-      if(commands.includes(presence)) return candidateStatus;
+    for(let map of this.answersMap.entries()){
+      const [candidateAnswer, tokens] = map;
+      if(tokens.includes(answer)) return candidateAnswer;
     }
 
-    return '';
+    return ` '${answer}' not recognized.`;
+  }
 
+  boolify(answer: string){
+    if(answer == 'yes') return true;
+    else return false;
   }
 }
+
+
